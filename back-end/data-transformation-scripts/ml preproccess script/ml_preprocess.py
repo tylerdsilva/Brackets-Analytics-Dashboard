@@ -2,13 +2,13 @@ import sys
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as f
 
-def main(inputs):
+def main(inputs, output):
     df_usage = spark.read.parquet(f'{inputs}/usage').drop('uuid','continent', 'usage_type', 'language')
     df_summary = spark.read.parquet(f'{inputs}/summary').drop('uuid','continent', 'theme')
 
     df_join = df_usage.join(df_summary, ['brackets_uuid','date', 'country'], how='left')
     df_agg = df_join.groupBy('date', 'platform', 'country').agg(f.countDistinct('brackets_uuid').alias('users'))
-    df_agg.write.partitionBy('date', 'platform', 'country')
+    df_agg.write.partitionBy('date', 'platform', 'country').parquet(output)
 
 
 if __name__ == '__main__':
@@ -17,5 +17,6 @@ if __name__ == '__main__':
     spark.sparkContext.setLogLevel('WARN')
     sc = spark.sparkContext
     inputs = sys.argv[1]
+    output = sys.argv[2]
 
-    main(inputs)
+    main(inputs, output)
