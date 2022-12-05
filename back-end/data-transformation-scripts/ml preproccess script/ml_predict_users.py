@@ -52,9 +52,9 @@ def main(inputs, output, platform, country):
     test_predictions = user_model.transform(test_df).coalesce(1) # num rows = 365 = small data easily stored in driver
 
     # Write in sample and out of sample predictions
-    path = f'{output}/{platform}/{country}'
-    train_predictions.write.parquet(f'{path}/train')
-    test_predictions.write.parquet(f'{path}/test')
+    path = f'{output}/platform={platform}/country={country}'
+    train_predictions.write.parquet(f'{path}/type=train')
+    test_predictions.write.parquet(f'{path}/type=test')
 
 if __name__ == '__main__':
     inputs = sys.argv[1]
