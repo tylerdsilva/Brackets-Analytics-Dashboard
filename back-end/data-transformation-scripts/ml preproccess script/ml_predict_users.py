@@ -16,7 +16,7 @@ import pandas as pd
 from itertools import cycle
 
 date_to_days_since_SQL = '''
-SELECT datediff(date, '2021-09-01') as day, users FROM __THIS__
+SELECT date, datediff(date, '2021-09-01') as day, users FROM __THIS__
 '''
 
 def run(inputs, output, platform, country):
