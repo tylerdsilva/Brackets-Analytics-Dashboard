@@ -70,7 +70,7 @@ def run_presistent(inputs, output):
             params = clean_params(json.loads(message.body))
 
             print(f'Running with params {params}')
-            run(inputs, output, params['platform'], params['country'])
+            run(inputs, output, params['Platform'], params['Country'])
 
             print(f'Finished running job {params["JobId"]}')
             response_queue.send_message(MessageBody = {'JobId':params['JobId'], 'status':'Success'})
