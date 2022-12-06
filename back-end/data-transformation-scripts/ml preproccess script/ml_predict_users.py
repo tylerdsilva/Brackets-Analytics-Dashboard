@@ -1,3 +1,7 @@
+from credentials import aws
+import boto3
+import json
+
 import sys
 assert sys.version_info >= (3, 5) # make sure we have Python 3.5+
 
@@ -18,7 +22,7 @@ date_to_days_since_SQL = '''
 SELECT datediff(date, '2021-09-01') as day, users FROM __THIS__
 '''
 
-def main(inputs, output, platform, country):
+def run(inputs, output, platform, country):
     data = spark.read.parquet(inputs)
 
     #Filter training data if inputs present
@@ -56,9 +60,37 @@ def main(inputs, output, platform, country):
     train_predictions.write.parquet(f'{path}/type=train')
     test_predictions.write.parquet(f'{path}/type=test')
 
+def run_presistent(inputs, output):
+    sqs = boto3.resource('sqs')
+    request_queue = sqs.get_queue_by_name(QueueName='DynamicJobRequest')
+    response_queue = sqs.get_queue_by_name(QueueName='DynamicJobResponse')
+
+    while True:
+        for message in request_queue.receive_messages(WaitTimeSeconds=20):
+            params = clean_params(json.loads(message.body))
+
+            print(f'Running with params {params}')
+            run(inputs, output, params['platform'], params['country'])
+
+            print(f'Finished running job {params["JobId"]}')
+            response_queue.send_message(MessageBody = {'JobId':params['JobId'], 'status':'Success'})
+            message.delete()
+
+def clean_params(params):
+    if params['Platform'] == 'Windows':
+        params['Platform'] = 'win'
+    elif params['Platform'] == 'Mac':
+        params['Platform'] == 'mac'
+    return params
+
 if __name__ == '__main__':
     inputs = sys.argv[1]
     output = sys.argv[2]
-    platform = sys.argv[3] if len(sys.argv) > 3 else 'None'
-    country = sy-s.argv[4] if len(sys.argv) > 4 else 'None'
-    main(inputs, output, platform, country)
+    mode = sys.argv[3] # If mode = n Normal run once, mode = p Persistent for queue jobs
+    platform = sys.argv[4] if len(sys.argv) > 4 else 'None'
+    country = sy-s.argv[5] if len(sys.argv) > 5 else 'None'
+
+    if mode == 'n':
+        run(inputs, output, platform, country)
+    elif mode == 'p':
+        run_presistent(inputs, output)
