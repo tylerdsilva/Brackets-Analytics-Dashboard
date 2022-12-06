@@ -6,9 +6,6 @@ import sys
 assert sys.version_info >= (3, 5) # make sure we have Python 3.5+
 
 from pyspark.sql import SparkSession, functions, types
-spark = SparkSession.builder.appName('TUBA User Prediction').getOrCreate()
-spark.sparkContext.setLogLevel('WARN')
-assert spark.version >= '2.4' # make sure we have Spark 2.4+
 
 from pyspark.ml import Pipeline
 from pyspark.ml.feature import PolynomialExpansion, SQLTransformer, VectorAssembler
@@ -57,8 +54,8 @@ def run(inputs, output, platform, country):
 
     # Write in sample and out of sample predictions
     path = f'{output}/platform={platform}/country={country}'
-    train_predictions.write.parquet(f'{path}/type=train')
-    test_predictions.write.parquet(f'{path}/type=test')
+    train_predictions.write.mode('overwrite').parquet(f'{path}/type=train')
+    test_predictions.write.mode('overwrite').parquet(f'{path}/type=test')
 
 def run_presistent(inputs, output):
     sqs = boto3.resource('sqs')
@@ -73,7 +70,8 @@ def run_presistent(inputs, output):
             run(inputs, output, params['Platform'], params['Country'])
 
             print(f'Finished running job {params["JobId"]}')
-            response_queue.send_message(MessageBody = {'JobId':params['JobId'], 'status':'Success'})
+            body = json.dumps({'JobId':params['JobId'], 'status':'Success'})
+            response_queue.send_message(MessageBody = body)
             message.delete()
 
 def clean_params(params):
@@ -89,6 +87,18 @@ if __name__ == '__main__':
     mode = sys.argv[3] # If mode = n Normal run once, mode = p Persistent for queue jobs
     platform = sys.argv[4] if len(sys.argv) > 4 else 'None'
     country = sy-s.argv[5] if len(sys.argv) > 5 else 'None'
+
+    # Connect to aws
+    spark = SparkSession.builder.appName('TUBA User Prediction') \
+            .config("fs.s3a.access.key", aws.access_key) \
+            .config("fs.s3a.secret.key", aws.secret_key) \
+            .config("fs.s3a.endpoint", 'http://s3-us-west-2.amazonaws.com') \
+            .config('spark.hadoop.fs.s3a.fast.upload.active.blocks', 1) \
+            .config('spark.hadoop.fs.s3a.fast.upload.buffer', 'bytebuffer') \
+            .getOrCreate()
+
+    spark.sparkContext.setLogLevel('WARN')
+    assert spark.version >= '2.4' # make sure we have Spark 2.4+
 
     if mode == 'n':
         run(inputs, output, platform, country)
