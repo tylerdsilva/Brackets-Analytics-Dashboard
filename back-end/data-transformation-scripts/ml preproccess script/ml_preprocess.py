@@ -8,7 +8,7 @@ def main(inputs, output):
 
     df_join = df_usage.join(df_summary, ['brackets_uuid','date', 'country'], how='left')
     df_agg = df_join.groupBy('date', 'platform', 'country').agg(f.countDistinct('brackets_uuid').alias('users'))
-    df_agg.write.partitionBy('date', 'platform', 'country').parquet(output)
+    df_agg.write.parquet(output)
 
 
 if __name__ == '__main__':
