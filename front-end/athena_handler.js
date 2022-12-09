@@ -18,7 +18,7 @@ const { v4: uuidv4 } = require('uuid');
  // Creating Athena Express service object
  const athenaExpress = new AthenaExpress(athenaExpressConfig);
 
-function getting_user_prediction(startDate, endDate, country, platform){
+async function getting_user_prediction(startDate, endDate, country, platform){
     let base_query = `SELECT * FROM user_predictions where date>= date('${startDate}') and date <= date('${endDate}')`;
     if(country){
         base_query=base_query+` and country='${country}' `;
@@ -35,7 +35,7 @@ function getting_user_prediction(startDate, endDate, country, platform){
     console.log(myQuery.sql)
     const labels_arr = []
     const data_arr = []
-    athenaExpress
+    await athenaExpress
 	.query(myQuery)
 	.then(results => {
         for (var i = 0; i < results.Items.length; i++){
@@ -53,7 +53,7 @@ function getting_user_prediction(startDate, endDate, country, platform){
     return {labels:labels_arr, data:data_arr}
 }
 
-function getting_top_countries(startDate, endDate, country, platform){
+async function getting_top_countries(startDate, endDate, country, platform){
     let base_query = `select sum(users) as users, country from users where date>= date('${startDate}') and date<= date('${endDate}')`;
     if(country){
         base_query=base_query+` and country='${country}' `;
@@ -71,7 +71,7 @@ function getting_top_countries(startDate, endDate, country, platform){
     console.log(myQuery.sql)
     const labels_arr = []
     const data_arr = []
-    athenaExpress
+    await athenaExpress
 	.query(myQuery)
 	.then(results => {
         for (var i = 0; i < results.Items.length; i++){
@@ -89,7 +89,7 @@ function getting_top_countries(startDate, endDate, country, platform){
     return {labels:labels_arr, data:data_arr}
 }
 
-function getting_active_users(startDate, endDate, country, platform){
+async function getting_active_users(startDate, endDate, country, platform){
     let base_query = `select sum(users) as users, date from users where date>=date('${startDate}') and date<=date('${endDate}')`;
     if(country){
         base_query=base_query+` and country='${country}' `;
@@ -107,7 +107,7 @@ function getting_active_users(startDate, endDate, country, platform){
     console.log(myQuery.sql)
     const labels_arr = []
     const data_arr = []
-    athenaExpress
+    await athenaExpress
 	.query(myQuery)
 	.then(results => {
         for (var i = 0; i < results.Items.length; i++){
@@ -125,7 +125,7 @@ function getting_active_users(startDate, endDate, country, platform){
     return {labels:labels_arr, data:data_arr}
 }
 
-function getting_returning_users(startDate, endDate, country, platform){
+async function getting_returning_users(startDate, endDate, country, platform){
     let base_query = `select sum(returned_count) as returned_users_count, date from returned_users where date>=date('${startDate}') and date<=date('${endDate}')`;
     if(country){
         base_query=base_query+` and country='${country}' `;
@@ -143,7 +143,7 @@ function getting_returning_users(startDate, endDate, country, platform){
     console.log(myQuery.sql)
     const labels_arr = []
     const data_arr = []
-    athenaExpress
+    await athenaExpress
 	.query(myQuery)
 	.then(results => {
         for (var i = 0; i < results.Items.length; i++){
@@ -161,7 +161,7 @@ function getting_returning_users(startDate, endDate, country, platform){
     return {labels:labels_arr, data:data_arr}
 }
 
-function getting_per_platform_users(startDate, endDate, country){
+async function getting_per_platform_users(startDate, endDate, country){
     let base_query = `select platform, sum(users) as users from users where date>=date('${startDate}') and date<=date('${endDate}') `;
     if(country){
         base_query=base_query+` and country='${country}' `;
@@ -174,7 +174,7 @@ function getting_per_platform_users(startDate, endDate, country){
     console.log(myQuery.sql)
     const labels_arr = []
     const data_arr = []
-    athenaExpress
+    await athenaExpress
 	.query(myQuery)
 	.then(results => {
         for (var i = 0; i < results.Items.length; i++){
@@ -192,7 +192,7 @@ function getting_per_platform_users(startDate, endDate, country){
     return {labels:labels_arr, data:data_arr}
 }
 
-function getting_user_action(startDate, endDate, country){
+async function getting_user_action(startDate, endDate, country){
     let base_query = `select usage_type, sum(usage_count) as usage_count from event_metrics where date>=date('${startDate}') and date<=date('${endDate}')  `;
     if(country){
         base_query=base_query+` and country='${country}' `;
@@ -205,7 +205,7 @@ function getting_user_action(startDate, endDate, country){
     console.log(myQuery.sql)
     const labels_arr = []
     const data_arr = []
-    athenaExpress
+    await athenaExpress
 	.query(myQuery)
 	.then(results => {
         for (var i = 0; i < results.Items.length; i++){
@@ -223,7 +223,7 @@ function getting_user_action(startDate, endDate, country){
     return {labels:labels_arr, data:data_arr}
 }
 
-function getting_top_programming_languages(startDate, endDate, country){
+async function getting_top_programming_languages(startDate, endDate, country){
     let base_query = `select language, sum(usage_count) as usage_count from event_metrics where usage_type='fileOpen' and date>=date('${startDate}') and date<=date('${endDate}')   `;
     if(country){
         base_query=base_query+` and country='${country}' `;
@@ -236,7 +236,7 @@ function getting_top_programming_languages(startDate, endDate, country){
     console.log(myQuery.sql)
     const labels_arr = []
     const data_arr = []
-    athenaExpress
+    await athenaExpress
 	.query(myQuery)
 	.then(results => {
         for (var i = 0; i < results.Items.length; i++){
@@ -254,7 +254,7 @@ function getting_top_programming_languages(startDate, endDate, country){
     return {labels:labels_arr, data:data_arr}
 }
 
-function getting_live_preview(startDate, endDate, country){
+async function getting_live_preview(startDate, endDate, country){
     let base_query = `select usage_type,sum(usage_count) as usage_count from event_metrics where usage_type='livePreview' and date>=date('${startDate}') and date<=date('${endDate}') `;
     if(country){
         base_query=base_query+` and country='${country}' `;
@@ -267,7 +267,7 @@ function getting_live_preview(startDate, endDate, country){
     console.log(myQuery.sql)
     const labels_arr = []
     const data_arr = []
-    athenaExpress
+    await athenaExpress
 	.query(myQuery)
 	.then(results => {
         for (var i = 0; i < results.Items.length; i++){
@@ -284,11 +284,14 @@ function getting_live_preview(startDate, endDate, country){
 
     return {labels:labels_arr, data:data_arr}
 }
-getting_user_prediction("2022-07-13","2022-10-25", "Canada","win");
-getting_top_countries("2022-07-13","2022-10-25", "Canada","win");
-getting_active_users("2022-07-13","2022-10-25", "Canada","win");
-getting_returning_users("2022-07-13","2022-10-25", "Canada","win");
-getting_per_platform_users("2022-07-13","2022-10-25", "Canada");
-getting_user_action("2022-07-13","2022-10-25", "Canada");
-getting_top_programming_languages("2022-07-13","2022-10-25", "Canada");
-getting_live_preview("2022-07-13","2022-10-25", "Canada");
+
+module.exports = {
+    getting_user_prediction,
+    getting_top_countries,
+    getting_active_users,
+    getting_returning_users,
+    getting_per_platform_users,
+    getting_user_action,
+    getting_top_programming_languages,
+    getting_live_preview
+};
