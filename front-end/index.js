@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const port = process.env.PORT || 3000;
+const athenaHandler = require("athena-express.js");
 
 // this is to tell express that static content is available
 // on the directory 'public' to render
@@ -87,6 +88,15 @@ app.post("/getLivePreview", (req, res) => {
     });
 });
 
+// this method calls user's prediction
+app.post("/getUsersPrediction", (req, res) => {
+    const result = athenaHandler.getting_user_prediction
+    console.log("/UsersPrediction " + req.body.data);
+    res.json({
+       labels: result.labels,
+       data: result.data 
+    });
+});
 
 //Server Listen with Port number
 app.listen(port, () => {
