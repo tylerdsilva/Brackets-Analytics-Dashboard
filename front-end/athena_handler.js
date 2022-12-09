@@ -254,5 +254,34 @@ function getting_top_programming_languages(startDate, endDate, country){
     return {labels:labels_arr, data:data_arr}
 }
 
+function getting_live_preview(startDate, endDate, country){
+    let base_query = `select usage_type,sum(usage_count) as usage_count from event_metrics where usage_type='livePreview' and date>=date('${startDate}') and date<=date('${endDate}') `;
+    if(country){
+        base_query=base_query+` and country='${country}' `;
+    }
+    base_query = base_query + ` group by usage_type `
+    let myQuery = {
+        sql : base_query,
+        db : "brackets_analytics"
+    };
+    console.log(myQuery.sql)
+    const labels_arr = []
+    const data_arr = []
+    athenaExpress
+	.query(myQuery)
+	.then(results => {
+        for (var i = 0; i < results.Items.length; i++){
+            var obj = results.Items[i];
+            labels_arr.push(obj.usage_type);
+            data_arr.push(obj.usage_count)
+          }
+        console.log(labels_arr);
+		console.log(data_arr);
+	})
+	.catch(error => {
+		console.log(error);
+	});   
 
+    return {labels:labels_arr, data:data_arr}
+}
 getting_user_prediction("2022-07-13","2022-12-25", "Canada","win");
