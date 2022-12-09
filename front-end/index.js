@@ -73,8 +73,8 @@ app.post("/getTopCountries", async (req, res) => {
 //User Action Metrics
 
 // Most common user action performed
-app.post("/getUserAction", (req, res) => {
-    const result = athenaHandler.getting_user_action
+app.post("/getUserAction", async (req, res) => {
+    const result = await athenaHandler.getting_user_action(req.body.startDate, req.body.endDate, req.body.country, req.body.platform);
     console.log("/getUserAction " + req.body.data);
     res.json({
        labels: result.labels,
@@ -83,19 +83,18 @@ app.post("/getUserAction", (req, res) => {
 });
 
 // Top Programming Languages being used
-app.post("/topProgrammingLanguages", (req, res) => {
-    const result = athenaHandler.getting_top_programming_languages
+app.post("/topProgrammingLanguages", async (req, res) => {
+    const result = await athenaHandler.getting_top_programming_languages(req.body.startDate, req.body.endDate, req.body.country, req.body.platform);
     console.log("/topProg " + req.body.data);
     res.json({
-       labels: result.labels,
-       data: result.data 
+       labels: result.labels.slice(0, 5),
+       data: result.data.slice(0, 5)
     });
 });
 
 // Getting count of users who performed live preview
-app.post("/getLivePreview", (req, res) => {
-    const result = athenaHandler.getting_live_preview
-    console.log("/live " + req.body.data);
+app.post("/getLivePreview", async (req, res) => {
+    const result = await athenaHandler.getting_live_preview(req.body.startDate, req.body.endDate, req.body.country, req.body.platform);
     res.json({
        labels: result.labels,
        data: result.data  
@@ -104,7 +103,7 @@ app.post("/getLivePreview", (req, res) => {
 
 // this method calls user's prediction
 app.post("/getUsersPrediction", (req, res) => {
-    const result = athenaHandler.getting_user_prediction
+    const result = athenaHandler.getting_user_prediction(req.body.startDate, req.body.endDate, req.body.country, req.body.platform);
     console.log("/UsersPrediction " + req.body.data);
     res.json({
        labels: result.labels,

@@ -270,9 +270,9 @@
             resp.data = data.data;
             removeData(myChart3);
             myChart3 = createChart('#per-platform-users', resp.labels, resp.data, "pie", [
-                "rgba(235, 22, 22, .7)",
-                "rgba(235, 22, 22, .5)",
-                "rgba(235, 22, 22, .2)"
+                "rgb(124, 4, 4)",
+                "rgb(173, 5, 5)",
+                "rgb(223, 6, 6)"
             ]);
         });
     }
@@ -290,11 +290,16 @@
             resp.data = data.data;
             removeData(myChart4);
             myChart4 = createChart('#top-countries', resp.labels, resp.data, "bar", [
-                "rgba(235, 22, 22, .7)",
-                "rgba(235, 22, 22, .6)",
-                "rgba(235, 22, 22, .5)",
-                "rgba(235, 22, 22, .4)",
-                "rgba(235, 22, 22, .3)"
+                "rgb(25, 1, 1)",
+                "rgb(74, 2, 2)",
+                "rgb(124, 4, 4)",
+                "rgb(173, 5, 5)",
+                "rgb(223, 6, 6)",
+                "rgb(249, 32, 32)",
+                "rgb(249, 32, 32)",
+                "rgb(251, 131, 131)",
+                "rgb(253, 181, 181)",
+                "rgb(254, 230, 230)"
             ]);
        });
     }

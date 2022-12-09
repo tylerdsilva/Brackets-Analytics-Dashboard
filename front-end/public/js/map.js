@@ -1,4 +1,5 @@
-new svgMap({
+(function ($) {
+  new svgMap({
     targetElementID: 'svgMap',
     data: {
       data: {
@@ -23,3 +24,4 @@ new svgMap({
       }
     }
   });
+})(jQuery);

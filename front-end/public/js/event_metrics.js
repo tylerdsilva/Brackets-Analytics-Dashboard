@@ -63,8 +63,8 @@
 
     //
     var inputData1 = {
-        "startDate": "",
-        "endDate":"",
+        "startDate": "2022-01-01",
+        "endDate":"2023-01-01",
         "country":"",
         "platform": ""
     };
@@ -133,7 +133,7 @@ options: {
     $("#metrics-start-date").datepicker({
         onSelect: function(dateText) {
             var splitDate = dateText.split('/');
-            var newFormat = splitDate[2] + '-' + splitDate[1] + '-' + splitDate[0];
+            var newFormat = splitDate[2] + '-' + splitDate[0] + '-' + splitDate[1];
             console.log("Selected date: " + dateText + "; input's current value: " + this.value);
             inputData1["startDate"] = newFormat;
             getUserAction(inputData1);
@@ -145,7 +145,7 @@ options: {
       $("#metrics-end-date").datepicker({
         onSelect: function(dateText) {
             var splitDate = dateText.split('/');
-            var newFormat = splitDate[2] + '-' + splitDate[1] + '-' + splitDate[0];
+            var newFormat = splitDate[2] + '-' + splitDate[0] + '-' + splitDate[1];
             console.log("Selected date: " + newFormat + "; input's current value: " + this.value);
             inputData1["endDate"] = newFormat;
             getUserAction(inputData1);
@@ -199,7 +199,18 @@ options: {
             success: function(response) {
                 console.log("Response Labels" + response.labels);
                 removeData(myChart5);
-                myChart5 = createChart("#user-action-metrics", response.labels, response.data, "bar", ["rgba(235, 22, 22, .7)"]);
+                myChart5 = createChart("#user-action-metrics", response.labels, response.data, "bar", [
+                "rgb(25, 1, 1)",
+                "rgb(74, 2, 2)",
+                "rgb(124, 4, 4)",
+                "rgb(173, 5, 5)",
+                "rgb(223, 6, 6)",
+                "rgb(249, 32, 32)",
+                "rgb(249, 32, 32)",
+                "rgb(251, 131, 131)",
+                "rgb(253, 181, 181)",
+                "rgb(254, 230, 230)"
+                ]);
             },
             error: function(xhr) {
             //Do Something to handle error
@@ -220,8 +231,16 @@ options: {
             resp.data = data.data;
             removeData(myChart6);
             myChart6 = createChart("#top-programming-languages", resp.labels, resp.data, "pie",  [
-                "rgba(235, 22, 22, .7)",
-                "rgba(235, 22, 22, .4)"
+                "rgb(25, 1, 1)",
+                "rgb(74, 2, 2)",
+                "rgb(124, 4, 4)",
+                "rgb(173, 5, 5)",
+                "rgb(223, 6, 6)",
+                "rgb(249, 32, 32)",
+                "rgb(249, 32, 32)",
+                "rgb(251, 131, 131)",
+                "rgb(253, 181, 181)",
+                "rgb(254, 230, 230)"
             ]);
     });
     }
@@ -238,7 +257,17 @@ options: {
             resp.labels = data.labels;
             resp.data = data.data;
             removeData(myChart7);
-            myChart7 = createChart('#countries-live-preview', resp.labels, resp.data, "bar", ["rgba(235, 22, 22, .7)"])
+            myChart7 = createChart('#countries-live-preview', resp.labels, resp.data, "bar", 
+            ["rgb(25, 1, 1)",
+            "rgb(74, 2, 2)",
+            "rgb(124, 4, 4)",
+            "rgb(173, 5, 5)",
+            "rgb(223, 6, 6)",
+            "rgb(249, 32, 32)",
+            "rgb(249, 32, 32)",
+            "rgb(251, 131, 131)",
+            "rgb(253, 181, 181)",
+            "rgb(254, 230, 230)"])
         });
     }
 
