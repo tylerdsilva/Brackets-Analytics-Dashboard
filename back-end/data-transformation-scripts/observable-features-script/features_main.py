@@ -53,8 +53,8 @@ if __name__ == '__main__':
     inputs = sys.argv[1]
     output = sys.argv[2]
     spark = SparkSession.builder.appName('T.U.B.A Spark Features') \
-        .config("fs.s3a.access.key", aws.access.key) \
-        .config("fs.s3a.secret.key", aws.secret.key) \
+        .config("fs.s3a.access.key", aws.access_key) \
+        .config("fs.s3a.secret.key", aws.secret_key) \
         .config("fs.s3a.endpoint", 'http://s3-us-west-2.amazonaws.com') \
         .config('spark.hadoop.fs.s3a.fast.upload.active.blocks', 1) \
         .config('spark.hadoop.fs.s3a.fast.upload.buffer', 'bytebuffer') \
