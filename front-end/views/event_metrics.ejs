@@ -49,7 +49,7 @@
                     <h5 class="text-primary"><i class="fa fa-chart-bar me-2"></i>Brackets Analytics</h5>
                 </a>
                 <div class="navbar-nav w-100">
-                    <a href="/" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>User Metrics</a>
+                    <a href="/" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>User Metrics</a>
                     <a href="/map" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>User Distribution</a>
                     <a href="/event_metrics" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Event Metrics</a>
                     <a href="/predictions" class="nav-item nav-link"><i class="fa fa-chart-line me-2"></i>Prediction</a>
@@ -72,6 +72,44 @@
             </nav>
             <!-- Navbar End -->
 
+            <div class = "container-fluid pt-4 px-4">
+                <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
+                    <div class="navbar-brand d-flex align-items-center justify-content-between py-4">
+                        <i class="fa fa-chart-line fa-2x text-primary"></i>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="">
+                                <h6 class="mb-0">Start Date:</h6>
+                                <div class="form-group">
+                                    <div class="input-group date" id="startdate" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input" data-target="#startdate"/>
+                                        <div class="d-flex input-group-append" data-target="#startdate" data-toggle="datetimepicker">
+                                            <div class="input-group-text bg-secondary"><i class="text-primary fa fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="">
+                                <h6 class="mb-0">End Date:</h6>
+                                <div class="form-group">
+                                    <div class="input-group date" id="enddate" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input" data-target="#enddate"/>
+                                        <div class="d-flex input-group-append" data-target="#enddate" data-toggle="datetimepicker">
+                                            <div class="input-group-text bg-secondary"><i class="text-primary fa fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+
 
             <!-- Metrics Chart Start -->
             <div class="container-fluid pt-4 px-4">
@@ -80,7 +118,18 @@
                         <div class="bg-secondary text-center rounded p-4">
                             <div class="d-flex align-items-center justify-content-between mb-4">
                                 <h5 class="mb-0">Top Programming Languages</h5>
-                                <a href="">Show All</a>
+                                <!---Dropdown-->
+                                <div class="dropdown" id="languages-dropdown">
+                                    <span id = "languages-span">Country</span>
+                                    <label>
+                                      <input type="checkbox">
+                                      <ul>
+                                        <li val="Personal">Personal</li>
+                                        <li val="Professional">Professional</li>
+                                        <li val="Financial">Financial</li>
+                                      </ul>
+                                    </label>
+                                  </div>
                             </div>
                             <canvas id="top-programming-languages"></canvas>
                         </div>
@@ -89,7 +138,18 @@
                         <div class="bg-secondary text-center rounded p-4">
                             <div class="d-flex align-items-center justify-content-between mb-4">
                                 <h5 class="mb-0">Event Type Metrics</h5>
-                                <a href="">Show All</a>
+                                <!---Dropdown-->
+                                <div class="dropdown" id="event-metrics-dropdown">
+                                    <span id = "event-metrics-span">Country</span>
+                                    <label>
+                                      <input type="checkbox">
+                                      <ul>
+                                        <li val="Personal">Personal</li>
+                                        <li val="Professional">Professional</li>
+                                        <li val="Financial">Financial</li>
+                                      </ul>
+                                    </label>
+                                  </div>
                             </div>
                             <canvas id="user-action-metrics"></canvas>
                         </div>
@@ -98,7 +158,6 @@
                         <div class="bg-secondary text-center rounded p-4">
                             <div class="d-flex align-items-center justify-content-between mb-4">
                                 <h5 class="mb-0">Top Countries Using Live Preview</h5>
-                                <a href="">Show All</a>
                             </div>
                             <canvas id="countries-live-preview"></canvas>
                         </div>

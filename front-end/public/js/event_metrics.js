@@ -47,10 +47,20 @@
         format: 'L'
     });
 
+    //Dropdown
+    $('#languages-dropdown li').click(function(){
+        $('#languages-span').text($(this).text());
+      });
+    
+    $('#event-metrics-dropdown li').click(function(){
+        $('#event-metrics-span').text($(this).text());
+    });
+
     // Chart Global Color
     Chart.defaults.color = "#6C7293";
     Chart.defaults.borderColor = "#000000";
-    
+
+
     //AJAX Queries
 
     $.ajax({
