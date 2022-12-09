@@ -1,5 +1,5 @@
 from pyspark import SparkConf, SparkContext
-from aws_user_credentials import aws
+from credentials import aws
 import sys
 import json
 assert sys.version_info >= (3, 5) # make sure we have Python 3.5+
