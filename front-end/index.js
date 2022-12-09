@@ -60,7 +60,7 @@ app.post("/perPlatformUsers", (req, res) => {
 
 // Getting top countries 
 app.post("/getTopCountries", (req, res) => {
-    const result = athenaHandler.getting_top_ten_countries
+    const result = athenaHandler.getting_top_countries
     res.json({
        labels: result.labels,
        data: result.data
