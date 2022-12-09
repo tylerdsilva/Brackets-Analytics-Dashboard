@@ -55,33 +55,159 @@
       $('#platform-index-dropdown li').click(function(){
         $('#platform-index-span').text($(this).text());
       }); 
+      
+      var inputData = {
+          "startDate": "",
+          "endDate":"",
+          "country":"",
+          "platform": ""
+      };
 
+
+      // Default Chart Objects
+    var ctx1 = $("#active-users").get(0).getContext("2d");
+    var myChart1 = new Chart(ctx1, {
+        type: "line",
+        data: {
+        labels: [],
+        datasets: [{
+            label: "Users",
+            data: [],
+            backgroundColor: "rgba(235, 22, 22, .7)",
+            fill: true
+        }
+        ]
+    },
+    options: {
+        responsive: true
+        }
+    });
+
+    var ctx2 = $("#returning-users").get(0).getContext("2d");
+    var myChart2 = new Chart(ctx2, {
+        type: "line",
+        data: {
+        labels: [],
+        datasets: [{
+            label: "Users",
+            data: [],
+            backgroundColor: "rgba(235, 22, 22, .7)",
+            fill: true
+        }
+        ]
+    },
+    options: {
+        responsive: true
+        }
+    });
+
+    var ctx3 = $("#per-platform-users").get(0).getContext("2d");
+    var myChart3 = new Chart(ctx3, {
+        type: "pie",
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Users',
+                backgroundColor: [
+                    "rgba(235, 22, 22, .7)",
+                    "rgba(235, 22, 22, .5)",
+                    "rgba(235, 22, 22, .2)"
+                ],
+                data: []
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+
+    var ctx4 = $("#top-countries").get(0).getContext("2d");
+    var myChart4 = new Chart(ctx4, {
+        type: "bar",
+        data: {
+        labels: [],
+        datasets: [{
+            label: 'Users', 
+            backgroundColor: [
+                "rgba(235, 22, 22, .7)",
+                "rgba(235, 22, 22, .6)",
+                "rgba(235, 22, 22, .5)",
+                "rgba(235, 22, 22, .4)",
+                "rgba(235, 22, 22, .3)"
+            ],
+        data: []
+        }]
+        },
+        options: {
+            responsive: true
+        }
+    });     
+
+
+      //Default Loading
+        getActiveUsers(inputData);
+        getReturningUsers(inputData);
+        getTopCountries(inputData);
+        getPlatformUsers(inputData);
+
+      // On change Listeners
+      $("#startdate-input").datepicker({
+        onSelect: function(dateText) {
+            var splitDate = dateText.split('/');
+            var newFormat = splitDate[2] + '-' + splitDate[1] + '-' + splitDate[0];
+            console.log("Selected date: " + dateText + "; input's current value: " + this.value);
+            inputData["startDate"] = newFormat;
+            getActiveUsers(inputData);
+            getReturningUsers(inputData);
+            getTopCountries(inputData);
+            getPlatformUsers(inputData);
+        }
+    });
+
+      $("#enddate-input").datepicker({
+        onSelect: function(dateText) {
+            var splitDate = dateText.split('/');
+            var newFormat = splitDate[2] + '-' + splitDate[1] + '-' + splitDate[0];
+            console.log("Selected date: " + newFormat + "; input's current value: " + this.value);
+            inputData["endDate"] = newFormat;
+            getActiveUsers(inputData);
+            getReturningUsers(inputData);
+            getTopCountries(inputData);
+            getPlatformUsers(inputData);
+        }
+    });
+
+    $('#country-index-dropdown li').click(function() {
+        inputData["country"] = $(this).attr("val");
+        getActiveUsers(inputData);
+        getReturningUsers(inputData);
+        getTopCountries(inputData);
+        getPlatformUsers(inputData);
+    });
+
+    $('#platform-index-ul li').click(function() {
+        inputData["platform"] = $(this).attr("val");
+        getActiveUsers(inputData);
+        getReturningUsers(inputData);
+        getTopCountries(inputData);
+        getPlatformUsers(inputData);
+    });
 
     // Chart Global Color
     Chart.defaults.color = "#6C7293";
     Chart.defaults.borderColor = "#000000";
 
-    // get Active Users
-    $.post("/getActiveUsers",
-        {
-            data: "dummy",
-        },
-        function (data, status) {
-            var resp = {
-                labels: [],
-                data: []
-            };
-            resp.labels = data.labels;
-            resp.data = data.data;
-            var ctx1 = $("#active-users").get(0).getContext("2d");
-            var myChart1 = new Chart(ctx1, {
-                type: "line",
+
+    function createChart(canvas_id, resp_labels, resp_data, chart_type, new_backgroundColor) {
+        var ctx = $(canvas_id).get(0).getContext("2d");
+            var myChart1 = new Chart(ctx, {
+                type: chart_type,
                 data: {
-                labels: resp.labels,
+                labels: resp_labels,
                 datasets: [{
                     label: "Users",
-                    data: resp.data,
-                    backgroundColor: "rgba(235, 22, 22, .7)",
+                    data: resp_data,
+                    backgroundColor: new_backgroundColor,
                     fill: true
                 }
                 ]
@@ -90,13 +216,34 @@
                 responsive: true
                 }
             });
-    });
+        
+        return myChart1;
+    }
+    
+    function removeData(chart) {
+        chart.destroy();
+    }
+    
+    function getActiveUsers(inputData) {
+        $.post("/getActiveUsers",
+            inputData,
+            function (data, status) {
+                var resp = {
+                    labels: [],
+                    data: []
+                };
+                resp.labels = data.labels;
+                resp.data = data.data;
+                //var new_chart_type = myChart1.type;
+                //var new_background_color = myChart1.data.datasets.backgroundColor;
+                removeData(myChart1);
+                myChart1 = createChart('#active-users', resp.labels, resp.data, "line", ["rgba(235, 22, 22, .7)"]);
+        });
+    }
 
-    // get Returning Users
-    $.post("/getReturningUsers",
-        {
-            data: "dummy",
-        },
+    function getReturningUsers(inputData){
+        $.post("/getReturningUsers",
+        inputData,
         function (data, status) {
             var resp = {
                 labels: [],
@@ -104,30 +251,15 @@
             };
             resp.labels = data.labels;
             resp.data = data.data;
-            var ctx2 = $("#returning-users").get(0).getContext("2d");
-            var myChart2 = new Chart(ctx2, {
-                type: "line",
-                data: {
-                labels: resp.labels,
-                datasets: [{
-                    label: "Users",
-                    data: resp.data,
-                    backgroundColor: "rgba(235, 22, 22, .7)",
-                    fill: true
-                }
-                ]
-            },
-            options: {
-                responsive: true
-                }
-            });
-    });
+            removeData(myChart2);
+            myChart2 = createChart('#returning-users', resp.labels, resp.data, "line", ["rgba(235, 22, 22, .7)"]);
+        });
+    }
 
-    // get Platform Users
-    $.post("/perPlatformUsers",
-        {
-            data: "dummy",
-        },
+    function getPlatformUsers(inputData) {
+            // get Platform Users
+        $.post("/perPlatformUsers",
+        inputData,
         function (data, status) {
             var resp = {
                 labels: [],
@@ -135,32 +267,19 @@
             };
             resp.labels = data.labels;
             resp.data = data.data;
-            var ctx3 = $("#per-platform-users").get(0).getContext("2d");
-            var myChart3 = new Chart(ctx3, {
-                type: "pie",
-                data: {
-                    labels: resp.labels,
-                    datasets: [{
-                        label: 'Users',
-                        backgroundColor: [
-                            "rgba(235, 22, 22, .7)",
-                            "rgba(235, 22, 22, .5)",
-                            "rgba(235, 22, 22, .2)"
-                        ],
-                        data: resp.data
-                    }]
-                },
-                options: {
-                    responsive: true
-                }
-            });
-    });
+            removeData(myChart3);
+            myChart3 = createChart('#per-platform-users', resp.labels, resp.data, "pie", [
+                "rgba(235, 22, 22, .7)",
+                "rgba(235, 22, 22, .5)",
+                "rgba(235, 22, 22, .2)"
+            ]);
+        });
+    }
 
-    // get Top Countries
-    $.post("/getTopCountries",
-        {
-            data: "dummy",
-        },
+    function getTopCountries(inputData) {
+            // get Top Countries
+       $.post("/getTopCountries",
+        inputData,
         function (data, status) {
             var resp = {
                 labels: [],
@@ -168,28 +287,16 @@
             };
             resp.labels = data.labels;
             resp.data = data.data;
-            var ctx4 = $("#top-countries").get(0).getContext("2d");
-            var myChart4 = new Chart(ctx4, {
-                type: "bar",
-                data: {
-                labels: ["Italy", "France", "Spain", "USA", "Argentina"],
-                datasets: [{
-                    label: 'Users', 
-                    backgroundColor: [
-                        "rgba(235, 22, 22, .7)",
-                        "rgba(235, 22, 22, .6)",
-                        "rgba(235, 22, 22, .5)",
-                        "rgba(235, 22, 22, .4)",
-                        "rgba(235, 22, 22, .3)"
-                    ],
-                data: [55, 49, 44, 24, 15]
-                }]
-                },
-                options: {
-                    responsive: true
-                }
-            });
-    });
+            removeData(myChart4);
+            myChart4 = createChart('#top-countries', resp.labels, resp.data, "bar", [
+                "rgba(235, 22, 22, .7)",
+                "rgba(235, 22, 22, .6)",
+                "rgba(235, 22, 22, .5)",
+                "rgba(235, 22, 22, .4)",
+                "rgba(235, 22, 22, .3)"
+            ]);
+       });
+    }
     
 })(jQuery);
 

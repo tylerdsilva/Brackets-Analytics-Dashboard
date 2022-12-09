@@ -29,6 +29,7 @@
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+    <link href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css' rel='stylesheet'>
 </head>
 
 <body>
@@ -84,10 +85,8 @@
                                 <h6 class="mb-0">Start Date:</h6>
                                 <div class="form-group">
                                     <div class="input-group date" id="startdate" data-target-input="nearest">
-                                        <input type="text" class="form-control datetimepicker-input" data-target="#startdate"/>
-                                        <div class="d-flex input-group-append" data-target="#startdate" data-toggle="datetimepicker">
-                                            <div class="input-group-text bg-secondary"><i class="text-primary fa fa-calendar"></i></div>
-                                        </div>
+                                        <input type="text" id ="predictions-start-date" class="form-control datetimepicker-input"/>
+                                        <div class="input-group-text bg-secondary"><i class="text-primary fa fa-calendar"></i></div>
                                     </div>
                                 </div>
                             </div>
@@ -99,10 +98,8 @@
                                 <h6 class="mb-0">End Date:</h6>
                                 <div class="form-group">
                                     <div class="input-group date" id="enddate" data-target-input="nearest">
-                                        <input type="text" class="form-control datetimepicker-input" data-target="#enddate"/>
-                                        <div class="d-flex input-group-append" data-target="#enddate" data-toggle="datetimepicker">
-                                            <div class="input-group-text bg-secondary"><i class="text-primary fa fa-calendar"></i></div>
-                                        </div>
+                                        <input type="text" id ="predictions-end-date" class="form-control datetimepicker-input"/>
+                                        <div class="input-group-text bg-secondary"><i class="text-primary fa fa-calendar"></i></div>
                                     </div>
                                 </div>
                             </div>
@@ -115,9 +112,21 @@
                                 <label>
                                   <input type="checkbox">
                                   <ul id="country-predictions-dropdown">
-                                    <li val="Personal">Personal</li>
-                                    <li val="Professional">Professional</li>
-                                    <li val="Financial">Financial</li>
+                                    <li val="United States">United States</li>
+                                    <li val="India">India</li>
+                                    <li val="Japan">Japan</li>
+                                    <li val="Russia">Russia</li>
+                                    <li val="South Korea">South Korea</li>
+                                    <li val="Germany">Germany</li>
+                                    <li val="United Kingdom">United Kingdom</li>
+                                    <li val="France">France</li>
+                                    <li val="Mexico">Mexico</li>
+                                    <li val="Poland">Poland</li>
+                                    <li val="Spain">Spain</li>
+                                    <li val="Brazil">Brazil</li>
+                                    <li val="Canada">Canada</li>
+                                    <li val="Italy">Italy</li>
+                                    <li val="Philippines">Philippines</li>
                                   </ul>
                                 </label>
                               </div>
@@ -129,7 +138,7 @@
                                 <span id = "platform-predictions-span">Platform</span>
                                 <label>
                                   <input type="checkbox">
-                                  <ul>
+                                  <ul id = "platform-predictions-ul">
                                     <li val="=win">Windows</li>
                                     <li val="mac">MacOS</li>
                                     <li val="null">Others</li>
@@ -211,6 +220,7 @@
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" ></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/chart/chart.min.js"></script>
     <script src="lib/easing/easing.min.js"></script>
