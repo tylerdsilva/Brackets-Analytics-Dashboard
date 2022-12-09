@@ -29,9 +29,15 @@ def run(inputs, output, platform, country):
 
     #Filter training data if inputs present
     if country != 'None':
-        data = data.where(data['country'] == country)
+        if country == 'null':
+            data = data.where(data['country'].isNull())
+        else:
+            data = data.where(data['country'] == country)
     if platform != 'None':
-        data = data.where(data['platform'] == platform)
+        if platform == 'null':
+            data = data.where(data['platform'].isNull())
+        else:
+            data = data.where(data['platform'] == platform)
 
     train = data.groupBy('date').agg(functions.sum('users').alias('users'))
 
