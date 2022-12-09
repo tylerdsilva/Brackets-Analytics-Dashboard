@@ -255,11 +255,11 @@ async function getting_top_programming_languages(startDate, endDate, country){
 }
 
 async function getting_live_preview(startDate, endDate, country){
-    let base_query = `select usage_type,sum(usage_count) as usage_count from event_metrics where usage_type='livePreview' and date>=date('${startDate}') and date<=date('${endDate}') `;
+    let base_query = `select country,sum(usage_count) as usage_count from event_metrics where usage_type='livePreview' and date>=date('${startDate}') and date<=date('${endDate}') `;
     if(country){
         base_query=base_query+` and country='${country}' `;
     }
-    base_query = base_query + ` group by usage_type `
+    base_query = base_query + ` group by country order by usage_count DESC `
     let myQuery = {
         sql : base_query,
         db : "brackets_analytics"
