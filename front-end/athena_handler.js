@@ -41,7 +41,7 @@ function getting_user_prediction(startDate, endDate, country, platform){
         for (var i = 0; i < results.Items.length; i++){
             var obj = results.Items[i];
             labels_arr.push(obj.date);
-            data_arr.push(obj.users)
+            data_arr.push(Number(obj.users))
           }
         console.log(labels_arr);
 		console.log(data_arr);
@@ -77,7 +77,7 @@ function getting_top_countries(startDate, endDate, country, platform){
         for (var i = 0; i < results.Items.length; i++){
             var obj = results.Items[i];
             labels_arr.push(obj.country);
-            data_arr.push(obj.users)
+            data_arr.push(Number(obj.users))
           }
         console.log(labels_arr);
 		console.log(data_arr);
@@ -113,7 +113,7 @@ function getting_active_users(startDate, endDate, country, platform){
         for (var i = 0; i < results.Items.length; i++){
             var obj = results.Items[i];
             labels_arr.push(obj.date);
-            data_arr.push(obj.users)
+            data_arr.push(Number(obj.users))
           }
         console.log(labels_arr);
 		console.log(data_arr);
@@ -149,7 +149,7 @@ function getting_returning_users(startDate, endDate, country, platform){
         for (var i = 0; i < results.Items.length; i++){
             var obj = results.Items[i];
             labels_arr.push(obj.date);
-            data_arr.push(obj.returned_users_count)
+            data_arr.push(Number(obj.returned_users_count))
           }
         console.log(labels_arr);
 		console.log(data_arr);
@@ -180,7 +180,7 @@ function getting_per_platform_users(startDate, endDate, country){
         for (var i = 0; i < results.Items.length; i++){
             var obj = results.Items[i];
             labels_arr.push(obj.platform);
-            data_arr.push(obj.users)
+            data_arr.push(Number(obj.users))
           }
         console.log(labels_arr);
 		console.log(data_arr);
@@ -193,7 +193,7 @@ function getting_per_platform_users(startDate, endDate, country){
 }
 
 function getting_user_action(startDate, endDate, country){
-    let base_query = `select usage_type, sum(usage_count) as usage_count from event_metrics where where date>=date('${startDate}') and date<=date('${endDate}')  `;
+    let base_query = `select usage_type, sum(usage_count) as usage_count from event_metrics where date>=date('${startDate}') and date<=date('${endDate}')  `;
     if(country){
         base_query=base_query+` and country='${country}' `;
     }
@@ -211,7 +211,7 @@ function getting_user_action(startDate, endDate, country){
         for (var i = 0; i < results.Items.length; i++){
             var obj = results.Items[i];
             labels_arr.push(obj.usage_type);
-            data_arr.push(obj.usage_count)
+            data_arr.push(Number(obj.usage_count))
           }
         console.log(labels_arr);
 		console.log(data_arr);
@@ -242,7 +242,7 @@ function getting_top_programming_languages(startDate, endDate, country){
         for (var i = 0; i < results.Items.length; i++){
             var obj = results.Items[i];
             labels_arr.push(obj.language);
-            data_arr.push(obj.usage_count)
+            data_arr.push(Number(obj.usage_count))
           }
         console.log(labels_arr);
 		console.log(data_arr);
@@ -273,7 +273,7 @@ function getting_live_preview(startDate, endDate, country){
         for (var i = 0; i < results.Items.length; i++){
             var obj = results.Items[i];
             labels_arr.push(obj.usage_type);
-            data_arr.push(obj.usage_count)
+            data_arr.push(Number(obj.usage_count));
           }
         console.log(labels_arr);
 		console.log(data_arr);
@@ -284,4 +284,11 @@ function getting_live_preview(startDate, endDate, country){
 
     return {labels:labels_arr, data:data_arr}
 }
-getting_user_prediction("2022-07-13","2022-12-25", "Canada","win");
+getting_user_prediction("2022-07-13","2022-10-25", "Canada","win");
+getting_top_countries("2022-07-13","2022-10-25", "Canada","win");
+getting_active_users("2022-07-13","2022-10-25", "Canada","win");
+getting_returning_users("2022-07-13","2022-10-25", "Canada","win");
+getting_per_platform_users("2022-07-13","2022-10-25", "Canada");
+getting_user_action("2022-07-13","2022-10-25", "Canada");
+getting_top_programming_languages("2022-07-13","2022-10-25", "Canada");
+getting_live_preview("2022-07-13","2022-10-25", "Canada");
