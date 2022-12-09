@@ -57,8 +57,8 @@
       }); 
       
       var inputData = {
-          "startDate": "",
-          "endDate":"",
+          "startDate": "2022-01-01",
+          "endDate":"2023-01-01",
           "country":"",
           "platform": ""
       };
@@ -154,7 +154,7 @@
       $("#startdate-input").datepicker({
         onSelect: function(dateText) {
             var splitDate = dateText.split('/');
-            var newFormat = splitDate[2] + '-' + splitDate[1] + '-' + splitDate[0];
+            var newFormat = splitDate[2] + '-' + splitDate[0] + '-' + splitDate[1];
             console.log("Selected date: " + dateText + "; input's current value: " + this.value);
             inputData["startDate"] = newFormat;
             getActiveUsers(inputData);
@@ -167,7 +167,7 @@
       $("#enddate-input").datepicker({
         onSelect: function(dateText) {
             var splitDate = dateText.split('/');
-            var newFormat = splitDate[2] + '-' + splitDate[1] + '-' + splitDate[0];
+            var newFormat = splitDate[2] + '-' + splitDate[0] + '-' + splitDate[1];
             console.log("Selected date: " + newFormat + "; input's current value: " + this.value);
             inputData["endDate"] = newFormat;
             getActiveUsers(inputData);
@@ -232,6 +232,7 @@
                     labels: [],
                     data: []
                 };
+                console.log("Active Data: " + JSON.stringify(data));
                 resp.labels = data.labels;
                 resp.data = data.data;
                 //var new_chart_type = myChart1.type;

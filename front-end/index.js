@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const port = process.env.PORT || 3000;
-const athenaHandler = require("athena_handler.js");
+const athenaHandler = require("./athena_handler.js");
 
 // this is to tell express that static content is available
 // on the directory 'public' to render
@@ -32,8 +32,8 @@ app.get("/event_metrics", (req, res) => {
 //AJAX Request Handling to render the data back
 // User Metrics
 // Getting active users
-app.post("/getActiveUsers", (req, res) => {
-    const result = athenaHandler.getting_active_users
+app.post("/getActiveUsers", async (req, res) => {
+    const result = await athenaHandler.getting_active_users(req.body.startDate, req.body.endDate, req.body.country, req.body.platform);
     res.json({
        labels: result.labels,
        data: result.data 
@@ -41,8 +41,8 @@ app.post("/getActiveUsers", (req, res) => {
 });
 
 // Getting returning users
-app.post("/getReturningUsers", (req, res) => {
-    const result = athenaHandler.getting_returning_users
+app.post("/getReturningUsers", async (req, res) => {
+    const result = await athenaHandler.getting_returning_users(req.body.startDate, req.body.endDate, req.body.country, req.body.platform);
     res.json({
        labels: result.labels,
        data: result.data  
@@ -50,8 +50,8 @@ app.post("/getReturningUsers", (req, res) => {
 });
 
 // Getting per platform users
-app.post("/perPlatformUsers", (req, res) => {
-    const result = athenaHandler.getting_per_platform_users
+app.post("/perPlatformUsers", async (req, res) => {
+    const result = await athenaHandler.getting_per_platform_users(req.body.startDate, req.body.endDate, req.body.country, req.body.platform);
     res.json({
        labels: result.labels,
        data: result.data 
@@ -59,11 +59,11 @@ app.post("/perPlatformUsers", (req, res) => {
 });
 
 // Getting top countries 
-app.post("/getTopCountries", (req, res) => {
-    const result = athenaHandler.getting_top_countries
+app.post("/getTopCountries", async (req, res) => {
+    const result = await athenaHandler.getting_top_countries(req.body.startDate, req.body.endDate, req.body.country, req.body.platform);
     res.json({
-       labels: result.labels,
-       data: result.data
+       labels: result.labels.slice(0, 10),
+       data: result.data.slice(0, 10)
     });
 });
 
