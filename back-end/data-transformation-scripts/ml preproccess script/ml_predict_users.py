@@ -2,6 +2,8 @@ from credentials import aws
 import boto3
 import json
 
+import time
+
 import sys
 assert sys.version_info >= (3, 5) # make sure we have Python 3.5+
 
@@ -73,6 +75,7 @@ def run_presistent(inputs, output):
             body = json.dumps({'JobId':params['JobId'], 'status':'Success'})
             response_queue.send_message(MessageBody = body)
             message.delete()
+        time.sleep(40) #sleep 40 seconds per 20 second poll - limits polling to 1 per minute
 
 def clean_params(params):
     if params['Platform'] == 'Windows':
