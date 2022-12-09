@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const port = process.env.PORT || 3000;
-const athenaHandler = require("athena-express.js");
+// const athenaHandler = require("athena-express.js");
 
 // this is to tell express that static content is available
 // on the directory 'public' to render
