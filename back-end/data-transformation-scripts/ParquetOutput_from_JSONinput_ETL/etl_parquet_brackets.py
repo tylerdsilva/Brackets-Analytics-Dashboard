@@ -6,15 +6,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql.types import StringType,DateType,StructType,StructField
 from datetime import datetime
 
-
 import uuid
-
-# remove corrupt JSON files
-def remove_corrupt(input):
-    try:
-        return json.loads(input)
-    except Exception as e:
-        pass
 
 #  Extract client analytics from nested json and add timestamp to it from every file
 def get_client_analytics(value):
@@ -106,14 +98,14 @@ def generate_parquet(df_summary,df_usage,output):
 # Creating RDDs and Dataframes to perform ETL over approximately 16,000 JSON files 
 # thereby removing corrupt files and performing business logic before geenrating parquet files
 def main(inputs, output):
-    rdd = sc.textFile(inputs).map(remove_corrupt).filter(lambda x:type(x)==dict)
+    rdd = sc.wholeTextFiles(inputs).map(lambda x: json.loads(x[1])).coalesce(100)
     client_analytics = rdd.flatMap(get_client_analytics).filter(get_client_analytics_with_events).cache()
     platform_rdd = client_analytics.filter(get_events_with_platform)
     usage_rdd = client_analytics.filter(get_events_with_usage)
     usage=usage_rdd.flatMap(pre_process_usage)
-    df_usage=spark.createDataFrame(usage,get_usage_schema()).repartition(1000)
+    df_usage=spark.createDataFrame(usage,get_usage_schema())
     summary=platform_rdd.flatMap(pre_process_summary)
-    df_summary=spark.createDataFrame(summary,get_summary_schema()).repartition(1000)
+    df_summary=spark.createDataFrame(summary,get_summary_schema())
     generate_parquet(df_summary, df_usage, output)
 
 if __name__ == '__main__':
