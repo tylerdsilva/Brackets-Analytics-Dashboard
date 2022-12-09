@@ -14,19 +14,19 @@ app.set("view engine", "ejs");
 
 // URL Route mappings
 app.get("/", (req, res) => {
-    res.render("index"); // index refers to index.ejs
+    res.render("index"); 
 });
 
 app.get("/map", (req, res) => {
-    res.render("map"); // index refers to index.ejs
+    res.render("map"); 
 });
 
 app.get("/predictions", (req, res) => {
-    res.render("predictions"); // index refers to index.ejs
+    res.render("predictions"); 
 });
 
 app.get("/event_metrics", (req, res) => {
-    res.render("event_metrics"); // index refers to index.ejs
+    res.render("event_metrics"); 
 });
 
 //AJAX Request Handling to render the data back
