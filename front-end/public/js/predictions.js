@@ -48,12 +48,12 @@
     });
 
     //Dropdown
-    $('#country-dropdown li').click(function(){
-        $('#country-span').text($(this).text());
+    $('#country-predictions-dropdown li').click(function(){
+        $('#country-predictions-span').text($(this).text());
       });
 
-      $('#platform-dropdown li').click(function(){
-        $('#platform-span').text($(this).text());
+      $('#platform-predictions-dropdown li').click(function(){
+        $('#platform-predictions-span').text($(this).text());
       }); 
 
 

@@ -47,6 +47,15 @@
         format: 'L'
     });
 
+    //Dropdown
+    $('#country-index-dropdown li').click(function(){
+        $('#country-index-span').text($(this).text());
+      });
+
+      $('#platform-index-dropdown li').click(function(){
+        $('#platform-index-span').text($(this).text());
+      }); 
+
 
     // Chart Global Color
     Chart.defaults.color = "#6C7293";
@@ -135,7 +144,8 @@
                         label: 'Users',
                         backgroundColor: [
                             "rgba(235, 22, 22, .7)",
-                            "rgba(235, 22, 22, .4)"
+                            "rgba(235, 22, 22, .5)",
+                            "rgba(235, 22, 22, .2)"
                         ],
                         data: resp.data
                     }]

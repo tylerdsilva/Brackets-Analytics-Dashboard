@@ -47,8 +47,8 @@ app.post("/getReturningUsers", (req, res) => {
 
 app.post("/perPlatformUsers", (req, res) => {
     res.json({
-       labels: ["MacOS", "Windows"],
-       data: [554567, 234567] 
+       labels: ["MacOS", "Windows", "Others"],
+       data: [554567, 234567, 20000] 
     });
 });
 
