@@ -87,6 +87,7 @@ app.post("/getLivePreview", (req, res) => {
        data: [15, 30, 55, 65, 60] 
     });
 });
+
 // this method calls user's prediction
 app.post("/getUsersPrediction", (req, res) => {
     const result = athenaHandler.getting_user_prediction

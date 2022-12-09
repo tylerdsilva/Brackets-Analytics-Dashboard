@@ -1,0 +1,70 @@
+// Import the AWS SDK
+const AWS = require('aws-sdk');
+//UUID for job id
+const { v4: uuidv4 } = require('uuid');
+
+// not a good idea to hardcode AWS creds
+// move to .env file if we have time and before open sourcing it
+// Configure the region
+AWS.config.update({
+    region: 'us-west-2',
+    apiVersion: 'latest',
+    credentials: {
+      accessKeyId: 'AKIAXNX4HWDXE3ZSVCV6',
+      secretAccessKey: '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'
+    }
+  });
+
+// Create an SQS service object
+const sqs = new AWS.SQS();
+
+function requestDynamicJob(payload, queueUrl) {
+    payload.JobId = uuidv4();
+    var params = {
+        // Remove DelaySeconds parameter and value for FIFO queues
+       DelaySeconds: 10,
+       MessageAttributes: {
+         "Country": {
+           DataType: "String",
+           StringValue: payload.Country
+         },
+         "Platform": {
+           DataType: "String",
+           StringValue: payload.Platform
+         },
+         "JobId": {
+           DataType: "String",
+           StringValue: payload.JobId
+         }
+       },
+       MessageBody: JSON.stringify(payload),
+       QueueUrl: queueUrl
+     };
+     
+     sqs.sendMessage(params, function(err, data) {
+        if (err) {
+          console.log("Error", err);
+        } else {
+          console.log("Success", data.MessageId);
+        }
+      });
+}
+
+function getDynamicJobStatus(queueUrl) {
+    var params = {
+        MaxNumberOfMessages: 10,
+        QueueUrl: queueUrl,
+        VisibilityTimeout: 20,
+        // this is the configuration for long polling
+        WaitTimeSeconds: 20
+       };
+    sqs.receiveMessage(params, function(err, data) {
+        if (err) {
+          console.log("Receive Error", err);
+          //return the data here after parsing.
+        } else if (data.Messages) {
+            console.log("Messages received : " + JSON.stringify(data.Messages));
+
+        }
+    });
+}
