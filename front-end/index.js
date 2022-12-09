@@ -36,7 +36,7 @@ app.post("/getActiveUsers", (req, res) => {
     const result = athenaHandler.getting_active_users
     res.json({
        labels: result.labels,
-       data: [15, 30, 55, 65, 60, 80, 95] 
+       data: result.data 
     });
 });
 
@@ -45,7 +45,7 @@ app.post("/getReturningUsers", (req, res) => {
     const result = athenaHandler.getting_returning_users
     res.json({
        labels: result.labels,
-       data: [15, 30, 55, 45, 70, 65, 85] 
+       data: result.data  
     });
 });
 
@@ -54,7 +54,7 @@ app.post("/perPlatformUsers", (req, res) => {
     const result = athenaHandler.getting_per_platform_users
     res.json({
        labels: result.labels,
-       data: [554567, 234567, 20000] 
+       data: result.data 
     });
 });
 
@@ -78,7 +78,7 @@ app.post("/getUserAction", (req, res) => {
     console.log("/getUserAction " + req.body.data);
     res.json({
        labels: result.labels,
-       data: [15, 30, 55, 65, 60, 80, 95] 
+       data: result.data 
     });
 });
 
@@ -88,7 +88,7 @@ app.post("/topProgrammingLanguages", (req, res) => {
     console.log("/topProg " + req.body.data);
     res.json({
        labels: result.labels,
-       data: [554567, 234567, 234000] 
+       data: result.data 
     });
 });
 
@@ -98,7 +98,7 @@ app.post("/getLivePreview", (req, res) => {
     console.log("/live " + req.body.data);
     res.json({
        labels: result.labels,
-       data: [15, 30, 55, 65, 60] 
+       data: result.data  
     });
 });
 
