@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const port = process.env.PORT || 3000;
-// const athenaHandler = require("athena-express.js");
+const athenaHandler = require("athena_handler.js");
 
 // this is to tell express that static content is available
 // on the directory 'public' to render
@@ -31,31 +31,39 @@ app.get("/event_metrics", (req, res) => {
 
 //AJAX Request Handling to render the data back
 // User Metrics
+// Getting active users
 app.post("/getActiveUsers", (req, res) => {
+    const result = athenaHandler.getting_active_users
     res.json({
-       labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022"],
-       data: [15, 30, 55, 65, 60, 80, 95] 
+       labels: result.labels,
+       data: result.data 
     });
 });
 
+// Getting returning users
 app.post("/getReturningUsers", (req, res) => {
+    const result = athenaHandler.getting_returning_users
     res.json({
-       labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022"],
-       data: [15, 30, 55, 45, 70, 65, 85] 
+       labels: result.labels,
+       data: result.data  
     });
 });
 
+// Getting per platform users
 app.post("/perPlatformUsers", (req, res) => {
+    const result = athenaHandler.getting_per_platform_users
     res.json({
-       labels: ["MacOS", "Windows", "Others"],
-       data: [554567, 234567, 20000] 
+       labels: result.labels,
+       data: result.data 
     });
 });
 
+// Getting top countries 
 app.post("/getTopCountries", (req, res) => {
+    const result = athenaHandler.getting_top_countries
     res.json({
-       labels: ["Italy", "France", "Spain", "USA", "Argentina"],
-       data: [55, 49, 44, 24, 15] 
+       labels: result.labels,
+       data: result.data
     });
 });
 
@@ -64,27 +72,33 @@ app.post("/getTopCountries", (req, res) => {
 
 //User Action Metrics
 
+// Most common user action performed
 app.post("/getUserAction", (req, res) => {
+    const result = athenaHandler.getting_user_action
     console.log("/getUserAction " + req.body.data);
     res.json({
-       labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022"],
-       data: [15, 30, 55, 65, 60, 80, 95] 
+       labels: result.labels,
+       data: result.data 
     });
 });
 
+// Top Programming Languages being used
 app.post("/topProgrammingLanguages", (req, res) => {
+    const result = athenaHandler.getting_top_programming_languages
     console.log("/topProg " + req.body.data);
     res.json({
-       labels: ["HTML", "PHP", "Java"],
-       data: [554567, 234567, 234000] 
+       labels: result.labels,
+       data: result.data 
     });
 });
 
+// Getting count of users who performed live preview
 app.post("/getLivePreview", (req, res) => {
+    const result = athenaHandler.getting_live_preview
     console.log("/live " + req.body.data);
     res.json({
-       labels: ["India", "USA", "Canada", "Mexico", "Brazil"],
-       data: [15, 30, 55, 65, 60] 
+       labels: result.labels,
+       data: result.data  
     });
 });
 

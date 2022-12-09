@@ -53,7 +53,7 @@ function getting_user_prediction(startDate, endDate, country, platform){
     return {labels:labels_arr, data:data_arr}
 }
 
-function getting_top_ten_countries(startDate, endDate, country, platform){
+function getting_top_countries(startDate, endDate, country, platform){
     let base_query = `select sum(users) as users, country from users where date>= date('${startDate}') and date<= date('${endDate}')`;
     if(country){
         base_query=base_query+` and country='${country}' `;
@@ -63,7 +63,7 @@ function getting_top_ten_countries(startDate, endDate, country, platform){
     } else if(platform) {
         base_query=base_query+` and platform='${platform}' `;
     }
-    base_query = base_query + `group by country order by users DESC LIMIT 10;`
+    base_query = base_query + `group by country order by users DESC;`
     let myQuery = {
         sql : base_query,
         db : "brackets_analytics"
