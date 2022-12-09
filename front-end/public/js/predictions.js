@@ -52,7 +52,36 @@
     Chart.defaults.color = "#6C7293";
     Chart.defaults.borderColor = "#000000";
 
-    // Active Users Chart
+    $.post("/getUsersPrediction",
+        {
+            data: "dummy",
+        },
+        function (data, status) {
+            var resp = {
+                labels: [],
+                data: []
+            };
+            resp.labels = data.labels;
+            resp.data = data.data;
+            var ctx1 = $("#active-users").get(0).getContext("2d");
+            var myChart1 = new Chart(ctx1, {
+                type: "line",
+                data: {
+                labels: resp.labels,
+                datasets: [{
+                    label: "Users",
+                    data: resp.data,
+                    backgroundColor: "rgba(235, 22, 22, .7)",
+                    fill: true
+                }
+                ]
+            },
+            options: {
+                responsive: true
+                }
+            });
+
+      // Active Users Chart
     var ctx1 = $("#active-users").get(0).getContext("2d");
     var myChart1 = new Chart(ctx1, {
         type: "line",
