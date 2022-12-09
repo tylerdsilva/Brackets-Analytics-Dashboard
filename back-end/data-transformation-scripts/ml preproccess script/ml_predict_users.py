@@ -21,6 +21,9 @@ date_to_days_since_SQL = '''
 SELECT date, datediff(date, '2021-09-01') as day, users FROM __THIS__
 '''
 
+aws_s3_connectors = ['/opt/hadoop/share/hadoop/tools/lib/aws-java-sdk-bundle-1.12.262.jar',
+                     '/opt/hadoop/share/hadoop/tools/lib/hadoop-aws-3.3.4.jar']
+
 def run(inputs, output, platform, country):
     data = spark.read.parquet(inputs)
 
@@ -89,7 +92,7 @@ if __name__ == '__main__':
     output = sys.argv[2]
     mode = sys.argv[3] # If mode = n Normal run once, mode = p Persistent for queue jobs
     platform = sys.argv[4] if len(sys.argv) > 4 else 'None'
-    country = sy-s.argv[5] if len(sys.argv) > 5 else 'None'
+    country = sys.argv[5] if len(sys.argv) > 5 else 'None'
 
     # Connect to aws
     spark = SparkSession.builder.appName('TUBA User Prediction') \
@@ -98,6 +101,7 @@ if __name__ == '__main__':
             .config("fs.s3a.endpoint", 'http://s3-us-west-2.amazonaws.com') \
             .config('spark.hadoop.fs.s3a.fast.upload.active.blocks', 1) \
             .config('spark.hadoop.fs.s3a.fast.upload.buffer', 'bytebuffer') \
+            .config('spark.jars', ','.join(aws_s3_connectors)) \
             .getOrCreate()
 
     spark.sparkContext.setLogLevel('WARN')
