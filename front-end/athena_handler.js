@@ -272,7 +272,7 @@ async function getting_live_preview(startDate, endDate, country){
 	.then(results => {
         for (var i = 0; i < results.Items.length; i++){
             var obj = results.Items[i];
-            labels_arr.push(obj.usage_type);
+            labels_arr.push(obj.country);
             data_arr.push(Number(obj.usage_count));
           }
         console.log(labels_arr);
