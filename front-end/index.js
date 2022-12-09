@@ -67,6 +67,15 @@ app.post("/getTopCountries", async (req, res) => {
     });
 });
 
+app.post("/getTotalUsers", async (req, res) => {
+    console.log("Call made");
+    const result = await athenaHandler.getting_top_countries(req.body.startDate, req.body.endDate, req.body.country, req.body.platform);
+    res.json({
+       labels: result.labels,
+       data: result.data
+    });
+});
+
 
 
 
@@ -96,8 +105,8 @@ app.post("/topProgrammingLanguages", async (req, res) => {
 app.post("/getLivePreview", async (req, res) => {
     const result = await athenaHandler.getting_live_preview(req.body.startDate, req.body.endDate, req.body.country, req.body.platform);
     res.json({
-       labels: result.labels,
-       data: result.data  
+       labels: result.labels.slice(0,10),
+       data: result.data.slice(0, 10)  
     });
 });
 
