@@ -27,9 +27,9 @@ def main(inputs, output):
     df2 = df_usage.alias('df2')
 
     returned_users = df1.join(df2, ["brackets_uuid"]).where('df1.date > df2.date')
-    returned_users_count = returned_users.groupBy("df1.date", "df1.country") \
+    df_join2 = returned_users.join(df_summary, ['brackets_uuid', 'date', 'country'], how='left')
+    returned_users_count = df_join2.groupBy("df1.date", "df1.country", "platform") \
         .agg(functions.countDistinct('brackets_uuid').alias('returned_count'))
-
     returned_users_count.write.partitionBy("date").parquet(f'{output}/return')
 
     # Input: usage table
