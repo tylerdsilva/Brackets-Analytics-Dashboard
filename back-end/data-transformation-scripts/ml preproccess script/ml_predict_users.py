@@ -81,7 +81,7 @@ def run_presistent(inputs, output):
             run(inputs, output, params['Platform'], params['Country'])
 
             print(f'Finished running job {params["JobId"]}')
-            body = json.dumps({'JobId':params['JobId'], 'status':'Success'})
+            body = json.dumps({**params, 'status':'Success'})
             response_queue.send_message(MessageBody = body)
             message.delete()
         time.sleep(40) #sleep 40 seconds per 20 second poll - limits polling to 1 per minute
