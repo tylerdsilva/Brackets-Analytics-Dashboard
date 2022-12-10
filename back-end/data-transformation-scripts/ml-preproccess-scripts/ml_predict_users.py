@@ -28,12 +28,12 @@ def run(inputs, output, platform, country):
     data = spark.read.parquet(inputs)
 
     #Filter training data if inputs present
-    if country and country != 'None':
+    if country != 'None':
         if country == 'null':
             data = data.where(data['country'].isNull())
         else:
             data = data.where(data['country'] == country)
-    if platform and platform != 'None':
+    if platform != 'None':
         if platform == 'null':
             data = data.where(data['platform'].isNull())
         else:
@@ -91,6 +91,10 @@ def clean_params(params):
         params['Platform'] = 'win'
     elif params['Platform'] == 'Mac':
         params['Platform'] == 'mac'
+    elif not params['Platform']:
+        params['Platform'] = 'None'
+    if not params['Country']:
+        params['Country'] = 'None' 
     return params
 
 if __name__ == '__main__':
