@@ -157,17 +157,23 @@
             <div class="container-fluid pt-4 px-4">
                 <div class="row g-4">
                     <div class="col-12">
+                        <div class="alert alert-success invisible" id="jobStatusMessage" role="alert">
+                            We couldn't find the data you've requested for. 
+                            To calculate the missing data we have triggered a Spark Job. 
+                            Please check the status of the job and id at the table below.
+                        </div>
+                    </div>
+                    <div class="col-12">
                         <div class="bg-secondary text-center rounded p-4">
                             <div class="d-flex align-items-center justify-content-between mb-4">
-                                <h4 class="mb-0">Predicted </h4>
-                                <a href="">Show All</a>
+                                <h4 class="mb-0">Predicted Users</h4>
                             </div>
-                            <canvas id="top-programming-languages"></canvas>
+                            <canvas id="predicted-users-canvas"></canvas>
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="bg-secondary rounded h-100 p-4">
-                            <h6 class="mb-4">Responsive Table</h6>
+                            <h6 class="mb-4">Dynamic Job Status Table</h6>
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
@@ -177,12 +183,7 @@
                                             <th scope="col"></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>John</td>
-                                            <td>Doe</td>
-                                        </tr>
+                                    <tbody id="jobStatus-tbody">
                                     </tbody>
                                 </table>
                             </div>

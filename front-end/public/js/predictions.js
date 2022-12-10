@@ -61,8 +61,8 @@
       }); 
 
       var inputData2 = {
-        "startDate": "",
-        "endDate":"",
+        "startDate": "2022-01-01",
+        "endDate":"2023-01-01",
         "country":"",
         "platform": ""
     };
@@ -71,7 +71,7 @@
     $("#predictions-start-date").datepicker({
         onSelect: function(dateText) {
             var splitDate = dateText.split('/');
-            var newFormat = splitDate[2] + '-' + splitDate[1] + '-' + splitDate[0];
+            var newFormat = splitDate[2] + '-' + splitDate[0] + '-' + splitDate[1];
             console.log("Selected date: " + dateText + "; input's current value: " + this.value);
             inputData2["startDate"] = newFormat;
             getUserPredictions(inputData2);
@@ -81,7 +81,7 @@
       $("#predictions-end-date").datepicker({
         onSelect: function(dateText) {
             var splitDate = dateText.split('/');
-            var newFormat = splitDate[2] + '-' + splitDate[1] + '-' + splitDate[0];
+            var newFormat = splitDate[2] + '-' + splitDate[0] + '-' + splitDate[1];
             console.log("Selected date: " + newFormat + "; input's current value: " + this.value);
             inputData2["endDate"] = newFormat;
             getUserPredictions(inputData2);
@@ -99,8 +99,8 @@
     });
 
     //Create chart objects
-    var ctx1 = $("#active-users").get(0).getContext("2d");
-    var myChart1 = new Chart(ctx1, {
+    var context = $("#predicted-users-canvas").get(0).getContext("2d");
+    var myChart1 = new Chart(context, {
         type: "line",
         data: {
         labels: [],
@@ -145,6 +145,47 @@
     function removeData(chart) {
         chart.destroy();
     }
+    
+    // polling to AWS SQS Queue for Job Status
+    $.post("/pollJobStatus",
+    inputData2,
+    function (data, status) {
+        var resp = {
+            labels: [],
+            data: []
+        };
+        resp.labels = data.labels;
+        resp.data = data.data;
+
+        if (resp.labels.length == 0 && resp.data.length == 0) {
+
+        } else {
+            removeData(myChart1);
+            myChart1 = createChart('#predicted-users-canvas', resp.labels, resp.data, "line", ["rgba(235, 22, 22, .7)"]);
+        }
+
+    });
+
+    var jobId = 0;
+
+    function triggerDynamicJob() {
+        var jobParameters = {
+            "country":"",
+            "platform": "",
+        };
+
+        jobParameters.country = inputData2.country;
+        jobParameters.platform = jobParameters.platform
+
+        $.post("/triggerDynamicJob",
+        inputData2,
+        function (data, status) {
+            jobId = data.jobId;
+            console.log(jobId);
+        });
+        return jobId;
+    }
+
 
     function getUserPredictions(inputData2) {
         $.post("/getUsersPrediction",
@@ -154,10 +195,36 @@
                 labels: [],
                 data: []
             };
+            console.log("Data received: " + JSON.stringify(data));
             resp.labels = data.labels;
             resp.data = data.data;
-            removeData(myChart1);
-            myChart1 = createChart('', resp.labels, resp.data, "line", ["rgba(235, 22, 22, .7)"]);
+
+            if (!resp.labels && !resp.data || (resp.labels.length == 0 && resp.data.length == 0)) {
+                jobId = triggerDynamicJob();
+                
+                if ($('#jobStatusMessage').hasClass('invisible')) {
+                    $('#jobStatusMessage').removeClass('invisible').addClass('visible');
+                }
+
+                $('#jobStatus-tbody').append(`<tr>
+                    <td>
+                    ${jobId}
+                    </td>
+                    <td id=${jobId}>
+                    <button type="button" class="btn btn-warning disabled">Pending</button>
+                    </td>
+                    <td class="disabled">
+                      <button class="btn btn-danger remove disabled"
+                        type="button">Plot</button>
+                   </td>
+                   </tr>`);
+            } else {
+                if ($('#jobStatusMessage').hasClass('visible')) {
+                    $('#jobStatusMessage').removeClass('visible').addClass('invisible');
+                }
+                removeData(myChart1);
+                myChart1 = createChart('#predicted-users-canvas', resp.labels, resp.data, "line", ["rgba(235, 22, 22, .7)"]);
+            }
         });
     }
     

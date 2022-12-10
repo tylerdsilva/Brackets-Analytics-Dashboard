@@ -3,6 +3,9 @@ const app = express();
 const path = require("path");
 const port = process.env.PORT || 3000;
 const athenaHandler = require("./athena_handler.js");
+const sqsHandler = require("./aws_sqs_handler.js");
+const dynamicJobQueueUrl = "https://sqs.us-west-2.amazonaws.com/510556352750/DynamicJobRequest";
+const dynamicJobStatusUrl = "https://sqs.us-west-2.amazonaws.com/510556352750/DynamicJobResponse";
 
 // this is to tell express that static content is available
 // on the directory 'public' to render
@@ -111,15 +114,31 @@ app.post("/getLivePreview", async (req, res) => {
 });
 
 // this method calls user's prediction
-app.post("/getUsersPrediction", (req, res) => {
-    const result = athenaHandler.getting_user_prediction(req.body.startDate, req.body.endDate, req.body.country, req.body.platform);
-    console.log("/UsersPrediction " + req.body.data);
+app.post("/getUsersPrediction", async (req, res) => {
+    const result = await athenaHandler.getting_user_prediction(req.body.startDate, req.body.endDate, req.body.country, req.body.platform);
+    console.log("W" + JSON.stringify(result));
     res.json({
        labels: result.labels,
        data: result.data,
        prediction : result.prediction
     });
 });
+
+//AWS SQS Queue Polling and Triggering a Job
+app.post("/triggerDynamicJob",async (req, res) => {
+    var payload = {
+        Country: req.body.country,
+        Platform: req.body.platform,
+        JobId: "" 
+    };
+    const result = await sqsHandler.requestDynamicJob(payload, dynamicJobQueueUrl);
+    // console.log("/UsersPrediction " + req.body.data);
+    res.json({
+        jobId: result
+    });
+    console.log(result);
+});
+
 
 //Server Listen with Port number
 app.listen(port, () => {

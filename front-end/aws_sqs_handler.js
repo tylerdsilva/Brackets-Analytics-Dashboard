@@ -18,36 +18,24 @@ AWS.config.update({
 // Create an SQS service object
 const sqs = new AWS.SQS();
 
-function requestDynamicJob(payload, queueUrl) {
+async function requestDynamicJob(payload, queueUrl) {
     payload.JobId = uuidv4();
     var params = {
         // Remove DelaySeconds parameter and value for FIFO queues
        DelaySeconds: 10,
-       MessageAttributes: {
-         "Country": {
-           DataType: "String",
-           StringValue: payload.Country
-         },
-         "Platform": {
-           DataType: "String",
-           StringValue: payload.Platform
-         },
-         "JobId": {
-           DataType: "String",
-           StringValue: payload.JobId
-         }
-       },
        MessageBody: JSON.stringify(payload),
        QueueUrl: queueUrl
      };
      
-     sqs.sendMessage(params, function(err, data) {
+    await sqs.sendMessage(params, function(err, data) {
         if (err) {
           console.log("Error", err);
+          payload.JobId = -1;
         } else {
           console.log("Success", data.MessageId);
         }
       });
+      return payload.JobId;
 }
 
 function getDynamicJobStatus(queueUrl) {
@@ -67,4 +55,9 @@ function getDynamicJobStatus(queueUrl) {
 
         }
     });
+}
+
+module.exports = {
+  requestDynamicJob,
+  getDynamicJobStatus
 }
