@@ -116,7 +116,6 @@ app.post("/getLivePreview", async (req, res) => {
 // this method calls user's prediction
 app.post("/getUsersPrediction", async (req, res) => {
     const result = await athenaHandler.getting_user_prediction(req.body.startDate, req.body.endDate, req.body.country, req.body.platform);
-    console.log("W" + JSON.stringify(result));
     res.json({
        labels: result.labels,
        data: result.data,
@@ -139,17 +138,8 @@ app.post("/triggerDynamicJob",async (req, res) => {
     console.log(result);
 });
 
-app.post("/pollJobStatus",async (req, res) => {
-    var payload = {
-        Country: req.body.country,
-        Platform: req.body.platform,
-        JobId: "" 
-    };
-    const result = await sqsHandler.getDynamicJobStatus(payload, dynamicJobQueueUrl);
-    // console.log("/UsersPrediction " + req.body.data);
-    res.json({
-        jobId: result
-    });
+app.post("/pollJobStatus", async (req, res) => {
+    const result = await sqsHandler.getDynamicJobStatus(dynamicJobStatusUrl);
     console.log(result);
 });
 

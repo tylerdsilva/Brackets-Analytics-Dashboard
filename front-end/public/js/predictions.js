@@ -151,24 +151,19 @@
         chart.destroy();
     }
     
-    // polling to AWS SQS Queue for Job Status
-    $.post("/pollJobStatus",
-    inputData2,
-    function (data, status) {
-        var resp = {
-            labels: [],
-            data: []
-        };
-        resp.labels = data.labels;
-        resp.data = data.data;
+    console.log("Out");
+    var refInterval = window.setInterval('getJobStatus()', 30000); // 30 seconds
 
-        if (resp.labels.length == 0 && resp.data.length == 0) {
-
-        } else {
-            removeData(myChart1);
-            myChart1 = createChart('#predicted-users-canvas', resp.labels, resp.data, "line", ["rgba(235, 22, 22, .7)"]);
-        }
-    });
+    function getJobStatus() {
+            // polling to AWS SQS Queue for Job Status
+       if ($('#jobStatus-tbody').children().length && $('#jobStatus-tbody').children().length > 0) {
+          console.log("Inside condition");
+          $.post("/pollJobStatus",
+          inputData2,
+            function (data, status) {
+          });
+       }
+    }
 
     var jobId = 0;
 

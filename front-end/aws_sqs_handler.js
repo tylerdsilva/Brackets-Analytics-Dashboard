@@ -39,6 +39,7 @@ async function requestDynamicJob(payload, queueUrl) {
 }
 
 async function getDynamicJobStatus(queueUrl) {
+  console.log("polling the data");
     var params = {
         MaxNumberOfMessages: 10,
         QueueUrl: queueUrl,
