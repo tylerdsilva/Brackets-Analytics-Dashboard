@@ -28,12 +28,12 @@ def run(inputs, output, platform, country):
     data = spark.read.parquet(inputs)
 
     #Filter training data if inputs present
-    if country != 'None':
+    if country and country != 'None':
         if country == 'null':
             data = data.where(data['country'].isNull())
         else:
             data = data.where(data['country'] == country)
-    if platform != 'None':
+    if platform and platform != 'None':
         if platform == 'null':
             data = data.where(data['platform'].isNull())
         else:
