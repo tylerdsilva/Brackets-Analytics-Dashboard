@@ -32,6 +32,7 @@ async function getting_user_prediction(startDate, endDate, country, platform){
     } else {
         base_query = base_query + ` and platform = 'None'`;
     }
+    base_query = base_query + ` order by date`
     let myQuery = {
         sql : base_query,
         db : "brackets_analytics"
@@ -105,7 +106,7 @@ async function getting_active_users(startDate, endDate, country, platform){
     } else if(platform) {
         base_query=base_query+` and platform='${platform}' `;
     }
-    base_query = base_query + ` group by date;`
+    base_query = base_query + ` group by date order by date;`
     let myQuery = {
         sql : base_query,
         db : "brackets_analytics"
@@ -141,7 +142,7 @@ async function getting_returning_users(startDate, endDate, country, platform){
     } else if(platform) {
         base_query=base_query+` and platform='${platform}' `;
     }
-    base_query = base_query + ` group by date;`
+    base_query = base_query + ` group by date order by date;`
     let myQuery = {
         sql : base_query,
         db : "brackets_analytics"
