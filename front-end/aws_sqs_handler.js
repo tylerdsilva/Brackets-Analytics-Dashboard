@@ -38,7 +38,7 @@ async function requestDynamicJob(payload, queueUrl) {
       return payload.JobId;
 }
 
-function getDynamicJobStatus(queueUrl) {
+async function getDynamicJobStatus(queueUrl) {
     var params = {
         MaxNumberOfMessages: 10,
         QueueUrl: queueUrl,
@@ -46,7 +46,7 @@ function getDynamicJobStatus(queueUrl) {
         // this is the configuration for long polling
         WaitTimeSeconds: 20
        };
-    sqs.receiveMessage(params, function(err, data) {
+    await sqs.receiveMessage(params, function(err, data) {
         if (err) {
           console.log("Receive Error", err);
           //return the data here after parsing.

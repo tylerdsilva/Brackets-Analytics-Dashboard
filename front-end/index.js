@@ -139,6 +139,23 @@ app.post("/triggerDynamicJob",async (req, res) => {
     console.log(result);
 });
 
+app.post("/pollJobStatus",async (req, res) => {
+    var payload = {
+        Country: req.body.country,
+        Platform: req.body.platform,
+        JobId: "" 
+    };
+    const result = await sqsHandler.getDynamicJobStatus(payload, dynamicJobQueueUrl);
+    // console.log("/UsersPrediction " + req.body.data);
+    res.json({
+        jobId: result
+    });
+    console.log(result);
+});
+
+app.get('*', function(req, res){
+    res.send('404');
+});
 
 //Server Listen with Port number
 app.listen(port, () => {

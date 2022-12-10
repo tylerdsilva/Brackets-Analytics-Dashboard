@@ -120,18 +120,23 @@
     //default
     getUserPredictions(inputData2);
 
-    function createChart(canvas_id, resp_labels, resp_data, chart_type, new_backgroundColor) {
+    function createChart(canvas_id, resp_labels, resp_data, resp_predictions, chart_type, new_backgroundColor) {
         var ctx = $(canvas_id).get(0).getContext("2d");
             var myChart1 = new Chart(ctx, {
                 type: chart_type,
                 data: {
                 labels: resp_labels,
                 datasets: [{
-                    label: "Users",
+                    label: "Actual User",
                     data: resp_data,
-                    backgroundColor: new_backgroundColor,
-                    fill: true
-                }
+                    backgroundColor: new_backgroundColor[0],
+                    fill: false},
+                    {
+                    label: "Predicted User",
+                    data: resp_predictions,
+                    backgroundColor: new_backgroundColor[1],
+                    fill: false
+                    }
                 ]
             },
             options: {
@@ -193,11 +198,13 @@
         function (data, status) {
             var resp = {
                 labels: [],
-                data: []
+                data: [],
+                prediction: [],
             };
             console.log("Data received: " + JSON.stringify(data));
             resp.labels = data.labels;
             resp.data = data.data;
+            resp.prediction = data.prediction;
 
             if (!resp.labels && !resp.data || (resp.labels.length == 0 && resp.data.length == 0)) {
                 jobId = triggerDynamicJob();
@@ -205,8 +212,8 @@
                 if ($('#jobStatusMessage').hasClass('invisible')) {
                     $('#jobStatusMessage').removeClass('invisible').addClass('visible');
                 }
-
-                $('#jobStatus-tbody').append(`<tr>
+                if (jobId != 0) {
+                    $('#jobStatus-tbody').append(`<tr>
                     <td>
                     ${jobId}
                     </td>
@@ -218,12 +225,14 @@
                         type="button">Plot</button>
                    </td>
                    </tr>`);
+                }
             } else {
                 if ($('#jobStatusMessage').hasClass('visible')) {
                     $('#jobStatusMessage').removeClass('visible').addClass('invisible');
                 }
                 removeData(myChart1);
-                myChart1 = createChart('#predicted-users-canvas', resp.labels, resp.data, "line", ["rgba(235, 22, 22, .7)"]);
+                myChart1 = createChart('#predicted-users-canvas', resp.labels, resp.data, 
+                resp.prediction, "line", ["rgba(74,2,2)", "rgba(50, 158, 168)"]);
             }
         });
     }
