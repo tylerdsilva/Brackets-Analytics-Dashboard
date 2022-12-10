@@ -168,7 +168,6 @@
             removeData(myChart1);
             myChart1 = createChart('#predicted-users-canvas', resp.labels, resp.data, "line", ["rgba(235, 22, 22, .7)"]);
         }
-
     });
 
     var jobId = 0;
