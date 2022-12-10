@@ -60,11 +60,11 @@ The server will save the results in `output/platform=None/country=None`
 On the cluster, make sure to pass the right S3 connectors to Spark.
 
 ```
-spark-submit --jars /opt/hadoop/share/hadoop/tools/lib/aws-java-sdk-bundle-1.12.262.jar,/opt/hadoop/share/hadoop/tools/lib/hadoop-aws-3.3.4.jar back-end/data-transformation-scripts/ml-preproccess-scripts/ml_predict.py brackets-ml-data s3a://brackets-analytics/user_predictions p
+spark-submit --jars /opt/hadoop/share/hadoop/tools/lib/aws-java-sdk-bundle-1.12.262.jar,/opt/hadoop/share/hadoop/tools/lib/hadoop-aws-3.3.4.jar back-end/data-transformation-scripts/ml-preproccess-scripts/ml_predict_users.py brackets-ml-data s3a://brackets-analytics/user_predictions p
 ```
 
 When a message comes into the Queue with body 
-```JSON 
+```
 {'Country':'Canada', 'Platform':'Windows', 'JobID':'1234-abcd-5678'}
 ```
 The server will run the regression with the filters `country='Canada' and platfrom='win'` and save the results to `s3://brackets-analytics/user_predictions/platform=win/country=Canada/`
