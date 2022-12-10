@@ -116,7 +116,8 @@ app.post("/getUsersPrediction", (req, res) => {
     console.log("/UsersPrediction " + req.body.data);
     res.json({
        labels: result.labels,
-       data: result.data 
+       data: result.data,
+       prediction : result.prediction
     });
 });
 

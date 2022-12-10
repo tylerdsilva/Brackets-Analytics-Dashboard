@@ -35,6 +35,7 @@ async function getting_user_prediction(startDate, endDate, country, platform){
     console.log(myQuery.sql)
     const labels_arr = []
     const data_arr = []
+    const prediction_arr = []
     await athenaExpress
 	.query(myQuery)
 	.then(results => {
@@ -42,6 +43,7 @@ async function getting_user_prediction(startDate, endDate, country, platform){
             var obj = results.Items[i];
             labels_arr.push(obj.date);
             data_arr.push(Number(obj.users))
+            prediction_arr.push(obj.prediction)
           }
         console.log(labels_arr);
 		console.log(data_arr);
@@ -50,7 +52,7 @@ async function getting_user_prediction(startDate, endDate, country, platform){
 		console.log(error);
 	});   
 
-    return {labels:labels_arr, data:data_arr}
+    return {labels:labels_arr, data:data_arr, prediction:prediction_arr}
 }
 
 async function getting_top_countries(startDate, endDate, country, platform){
