@@ -22,11 +22,15 @@ async function getting_user_prediction(startDate, endDate, country, platform){
     let base_query = `SELECT * FROM user_predictions where date>= date('${startDate}') and date <= date('${endDate}')`;
     if(country){
         base_query=base_query+` and country='${country}' `;
+    } else {
+        base_query = base_query + ` and country = 'None'`;
     }
     if(platform=='null'){
         base_query=base_query+` and platform is null `;
     } else if(platform) {
         base_query=base_query+` and platform='${platform}'`;
+    } else {
+        base_query = base_query + ` and platform = 'None'`;
     }
     let myQuery = {
         sql : base_query,
