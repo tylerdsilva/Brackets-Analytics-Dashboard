@@ -91,6 +91,10 @@ def clean_params(params):
         params['Platform'] = 'win'
     elif params['Platform'] == 'Mac':
         params['Platform'] == 'mac'
+    elif not params['Platform']:
+        params['Platform'] = 'None'
+    if not params['Country']:
+        params['Country'] = 'None' 
     return params
 
 if __name__ == '__main__':
