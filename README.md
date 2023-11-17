@@ -2,7 +2,7 @@
 ## Analytics dashboard for Brackets(open source code editor platform)
 
 #### Front End Link
-http://ec2-35-89-25-69.us-west-2.compute.amazonaws.com:3000/
+http://ec2-54-148-120-41.us-west-2.compute.amazonaws.com:3000/
 
 #### Running the project
 The instructions on how to run the project and other scripts used are in [HERE](./RUNNING.md)
